@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio do Restaurante</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class = "body">
+    <div class="container">
+        <h1>Restaurante nada mais recifense</h1>
+        <div id="menu" class="menu-container"></div>
+        <div class="input-container">
+            <button onclick="chooseItems()">Escolher</button>
+        </div>
+        <div id="response"></div>
+    </div></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/menu')
+                .then(response => response.json())
+                .then(data => {
+                    const menuDiv = document.getElementById('menu');
+                    data.menu.forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.classList.add('menu-item');
+                        itemDiv.dataset.id = item.id;
+
+                        const nameDiv = document.createElement('div');
+                        nameDiv.classList.add('item-name');
+                        nameDiv.textContent = `${item.id}. ${item.name}`;
+
+                        const priceDiv = document.createElement('div');
+                        priceDiv.classList.add('item-price');
+                        priceDiv.textContent = `R$${item.price.toFixed(2)}`;
+
+                        itemDiv.appendChild(nameDiv);
+                        itemDiv.appendChild(priceDiv);
+
+                        itemDiv.addEventListener('click', () => {
+                            itemDiv.classList.toggle('selected');
+                        });
+
+                        menuDiv.appendChild(itemDiv);
+                    });
+                });
+        });
+
+        function chooseItems() {
+            const selectedItems = Array.from(document.querySelectorAll('.menu-item.selected'))
+                .map(item => parseInt(item.dataset.id));
+            
+            fetch('/api/choose', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ choices: selectedItems })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const responseDiv = document.getElementById('response');
+                responseDiv.textContent = data.message;
+            });
+        }
+    </script>
+</body>
+</html>
