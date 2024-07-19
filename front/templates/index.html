@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio do Restaurante Baratie</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Baratie</h1>
+    <h2>Cardápio</h2>
+    
+    <div class="menu">
+        <div class="menuItem">
+            <button class="itemButton" onclick="addItem('Prato 1', 20)">
+                <img src="https://via.placeholder.com/100" alt="Prato 1">
+                <div>R$20</div>
+            </button>
+        </div>
+        <div class="menuItem">
+            <button class="itemButton" onclick="addItem('Prato 2', 35)">
+                <img src="https://via.placeholder.com/100" alt="Prato 2">
+                <div>R$35</div>
+            </button>
+        </div>
+        <div class="menuItem">
+            <button class="itemButton" onclick="addItem('Prato 3', 12)">
+                <img src="https://via.placeholder.com/100" alt="Prato 3">
+                <div>R$12</div>
+            </button>
+        </div>
+        <div class="menuItem">
+            <button class="itemButton" onclick="addItem('Prato 4', 60)">
+                <img src="https://via.placeholder.com/100" alt="Prato 4">
+                <div>R$60</div>
+            </button>
+        </div>
+    </div>
+    
+    <div id="cart">
+        <h3>Carrinho de Compras</h3>
+        <div id="cartItems">
+            <!-- Itens do carrinho serão adicionados dinamicamente aqui -->
+        </div>
+        <div class="cartButtons">
+            <button class="cartButton" onclick="finalizarCompra()">Finalizar</button>
+            <button class="cartButton cancelButton" onclick="cancelarCompra()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let carrinho = [];
+
+    function addItem(nome, valor) {
+        carrinho.push({ nome: nome, valor: valor });
+        atualizarCarrinho();
+    }
+
+    function atualizarCarrinho() {
+        const cartItemsElement = document.getElementById('cartItems');
+        cartItemsElement.innerHTML = '';
+        
+        carrinho.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('cartItem');
+            itemElement.textContent = `${item.nome} - R$${item.valor}`;
+            cartItemsElement.appendChild(itemElement);
+        });
+    }
+
+    function finalizarCompra() {
+        let total = 0;
+        carrinho.forEach(item => {
+            total += item.valor;
+        });
+        alert(`Valor total da compra: R$${total}`);
+    }
+
+    function cancelarCompra() {
+        carrinho = [];
+        atualizarCarrinho();
+    }
+</script>
+
+</body>
+</html>
